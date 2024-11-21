@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Label label = new Label("Hello World");
+        Label label = new Label("I hate microsoft...\nAlso sobek is good sobek :D");
         label.setAlignment(Pos.CENTER);
         primaryStage.setScene(new Scene(label, 300, 250));
-        primaryStage.setTitle("Hello World Application");
+        primaryStage.setTitle("MyMicrosobtPain");
         primaryStage.show();
     }
 }
