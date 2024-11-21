@@ -9,7 +9,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Label label = new Label("I hate microsoft...\nAlso sobek is good sobek :D");
         label.setAlignment(Pos.CENTER);
-        primaryStage.setScene(new Scene(label, 300, 250));
+	Scene scene = new Scene(label, 300, 250);
+        primaryStage.setScene(scene);
         primaryStage.setTitle("MyMicrosobtPain");
         primaryStage.show();
     }
