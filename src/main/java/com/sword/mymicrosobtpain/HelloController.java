@@ -1,4 +1,5 @@
-package com.sword.microsobtpain;
+package com.sword.mymicrosobtpain;
+
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
