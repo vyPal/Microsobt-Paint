@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sword.mymicrosobtpain.CanvasController">
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Load" onAction="#loadImage"/>
+                <MenuItem text="Save" onAction="#saveImage"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <Canvas fx:id="canvas" width="800" height="600"/>
+    </center>
+</BorderPane>
