@@ -4,6 +4,7 @@ module com.sword.mymicrosobtpain {
     requires javafx.graphics;
     requires javafx.base;
     requires javafx.fxml;
+    requires javafx.swing;
     requires transitive java.desktop;
 
 

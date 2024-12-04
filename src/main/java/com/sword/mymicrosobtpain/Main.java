@@ -1,6 +1,7 @@
 package com.sword.mymicrosobtpain;
 
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -124,13 +125,13 @@ public class Main extends Application {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp"));
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            //try {
+            try {
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
                 canvas.snapshot(null, writableImage);
-                //ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
-            /*} catch (IOException ex) {
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
+            } catch (IOException ex) {
                 ex.printStackTrace();
-            }*/
+            }
         }
     }
 }
