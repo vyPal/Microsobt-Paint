@@ -1,11 +1,9 @@
 package com.sword.mymicrosobtpain;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -13,15 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.IOException;
+
+
 
 public class Main extends Application {
 
@@ -36,9 +31,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MyMicrosobtPain");
 
-
-
-
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);
 
@@ -48,8 +40,7 @@ public class Main extends Application {
         MenuItem loadItem = new MenuItem("Load");
         MenuItem saveItem = new MenuItem("Save");
 
-        Menu colorMenu = new Menu("Colors")
-;
+        Menu colorMenu = new Menu("Colors");
 
         MenuItem blueButton = new MenuItem("Blue");
         MenuItem redButton = new MenuItem("Red");
@@ -57,18 +48,22 @@ public class Main extends Application {
 
         Menu canvasMenu = new Menu("Canvas");
         MenuItem clearCanvasItem = new MenuItem("Clear canvas");
+        MenuItem undoStepItem = new MenuItem("Undo");
 
         fileMenu.getItems().addAll(loadItem, saveItem);
         menuBar.getMenus().add(fileMenu);
-        canvasMenu.getItems().add(clearCanvasItem);
+        canvasMenu.getItems().addAll(clearCanvasItem,undoStepItem);
         menuBar.getMenus().add(canvasMenu);
         colorMenu.getItems().addAll(blueButton,redButton,blackButton);
         menuBar.getMenus().add(colorMenu);
 
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
+        CanvasController canvasController = new CanvasController(canvas);
+
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
+            canvasController.saveState();
             gc.beginPath();
             gc.moveTo(e.getX(), e.getY());
             gc.stroke();
@@ -79,7 +74,6 @@ public class Main extends Application {
             gc.stroke();
         });
 
-        CanvasController canvasController = new CanvasController(canvas);
 
         loadItem.setOnAction(e -> loadImage(primaryStage));
         saveItem.setOnAction(e -> saveImage(primaryStage));
@@ -88,14 +82,12 @@ public class Main extends Application {
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
         blackButton.setOnAction(e-> canvasController.changeColor(Color.BLACK));
-
+        undoStepItem.setOnAction(e-> canvasController.undo());
 
         root.setTop(menuBar);
         root.setCenter(canvas);
-
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
     private void clearCanvas(CanvasController canvasController){
