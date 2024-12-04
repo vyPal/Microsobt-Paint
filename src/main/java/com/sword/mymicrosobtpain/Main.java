@@ -2,6 +2,7 @@ package com.sword.mymicrosobtpain;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -17,8 +18,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.event.EventHandler;
+
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -49,8 +54,23 @@ public class Main extends Application {
         MenuItem loadItem = new MenuItem("Load");
         MenuItem saveItem = new MenuItem("Save");
 
-        Menu colorMenu = new Menu("Colors")
-;
+        Menu colorMenu = new Menu("Colors");
+
+        Menu AboutMenu = new Menu("About");
+        MenuItem AboutUs = new MenuItem("About Us");
+        AboutUs.setOnAction(new EventHandler<ActionEvent>() {
+            
+            public void handle(ActionEvent event) {
+                final Stage dialog = new Stage();
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.initOwner(primaryStage);
+                VBox dialogVbox = new VBox(50);
+                dialogVbox.getChildren().add(new Text("About sus: javaFX sux"));
+                Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                dialog.setScene(dialogScene);
+                dialog.show();
+            }
+         });
 
         MenuItem blueButton = new MenuItem("Blue");
         MenuItem redButton = new MenuItem("Red");
@@ -65,6 +85,8 @@ public class Main extends Application {
         menuBar.getMenus().add(canvasMenu);
         colorMenu.getItems().addAll(blueButton,redButton,blackButton);
         menuBar.getMenus().add(colorMenu);
+        AboutMenu.getItems().addAll(AboutUs);
+        menuBar.getMenus().add(AboutMenu);
 
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
@@ -124,11 +146,15 @@ public class Main extends Application {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPEG files (*.jpeg)", "*.jpeg"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp"));
         File file = fileChooser.showSaveDialog(stage);
+        System.out.println("Sobek pred if");
         if (file != null) {
+            System.out.println("Sobek");
             try {
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
                 canvas.snapshot(null, writableImage);
-                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
+                System.out.println("Pred");
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);
+                System.out.println("Po");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
