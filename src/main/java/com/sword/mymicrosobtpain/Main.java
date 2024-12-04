@@ -38,8 +38,14 @@ public class Main extends Application {
         Menu fileMenu = new Menu("File");
         MenuItem loadItem = new MenuItem("Load");
         MenuItem saveItem = new MenuItem("Save");
+
+        Menu canvasMenu = new Menu("Canvas");
+        MenuItem clearCanvasItem = new MenuItem("Clear canvas");
+
         fileMenu.getItems().addAll(loadItem, saveItem);
         menuBar.getMenus().add(fileMenu);
+        canvasMenu.getItems().add(clearCanvasItem);
+        menuBar.getMenus().add(canvasMenu);
 
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
@@ -55,14 +61,22 @@ public class Main extends Application {
             gc.stroke();
         });
 
+        CanvasController canvasController = new CanvasController(canvas);
+
         loadItem.setOnAction(e -> loadImage(primaryStage));
         saveItem.setOnAction(e -> saveImage(primaryStage));
+        clearCanvasItem.setOnAction(e-> clearCanvas(canvasController));
 
         root.setTop(menuBar);
         root.setCenter(canvas);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+    }
+
+    private void clearCanvas(CanvasController canvasController){
+        canvasController.clearCanvas();
     }
 
     private void loadImage(Stage stage) {
