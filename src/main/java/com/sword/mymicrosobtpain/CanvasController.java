@@ -1,5 +1,6 @@
 package com.sword.mymicrosobtpain;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -11,7 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 
 public class CanvasController {
 
@@ -69,13 +72,13 @@ public class CanvasController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPEG files (*.jpg)", "*.jpg"));
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            //try {
+            try {
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
                 canvas.snapshot(null, writableImage);
-                //ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
-            /*} catch (IOException ex) {
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
+            } catch (IOException ex) {
                 ex.printStackTrace();
-            }*/
+            }
         }
     }
 
