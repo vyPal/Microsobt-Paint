@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 
 
+
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
@@ -42,12 +43,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MyMicrosobtPain");
 
-
-
+        primaryStage.getIcons().add(new Image("file:paint-palette.png"));
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);
-
 
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("File");
@@ -62,11 +61,12 @@ public class Main extends Application {
             
             public void handle(ActionEvent event) {
                 final Stage dialog = new Stage();
+                dialog.setTitle("About our team!");
                 dialog.initModality(Modality.APPLICATION_MODAL);
                 dialog.initOwner(primaryStage);
-                VBox dialogVbox = new VBox(50);
-                dialogVbox.getChildren().add(new Text("About sus: javaFX sux"));
-                Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                VBox dialogVbox = new VBox(20);
+                dialogVbox.getChildren().add(new Text("Members: Michal Prikasky, Sebastian Ondruska,\nJiri Novak, Jakub Palacky\nPS. JavaFx sucks :<"));
+                Scene dialogScene = new Scene(dialogVbox, 400, 300);
                 dialog.setScene(dialogScene);
                 dialog.show();
             }

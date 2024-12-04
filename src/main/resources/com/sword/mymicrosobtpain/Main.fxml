@@ -13,6 +13,21 @@
                 <MenuItem text="Load" onAction="#loadImage"/>
                 <MenuItem text="Save" onAction="#saveImage"/>
             </Menu>
+
+            <Menu text="Canvas">
+                <MenuItem text="Clear canvas" onAction="#clearCanvas"/>
+                <MenuItem text="Undo" onAction="#undo"/>
+            </Menu>
+            
+            <Menu text="Colors">
+                <MenuItem text="Blue"/>
+                <MenuItem text="Red"/>
+                <MenuItem text="Black"/>
+            </Menu>
+
+            <Menu text="About">
+                <MenuItem text="About us" onAction="#handle"/>
+            </Menu>
         </MenuBar>
     </top>
     <center>
