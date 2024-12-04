@@ -1,9 +1,12 @@
 package com.sword.mymicrosobtpain;
 
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -11,12 +14,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
 import java.io.File;
-
-
+import java.io.IOException;
 
 public class Main extends Application {
 
@@ -30,6 +36,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MyMicrosobtPain");
+
+
+
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);
@@ -75,6 +84,7 @@ public class Main extends Application {
         });
 
 
+
         loadItem.setOnAction(e -> loadImage(primaryStage));
         saveItem.setOnAction(e -> saveImage(primaryStage));
         clearCanvasItem.setOnAction(e-> clearCanvas(canvasController));
@@ -86,8 +96,10 @@ public class Main extends Application {
 
         root.setTop(menuBar);
         root.setCenter(canvas);
+
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     private void clearCanvas(CanvasController canvasController){
@@ -116,13 +128,13 @@ public class Main extends Application {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp"));
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            //try {
+            try {
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
                 canvas.snapshot(null, writableImage);
-                //ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
-            /*} catch (IOException ex) {
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "jpg", file);
+            } catch (IOException ex) {
                 ex.printStackTrace();
-            }*/
+            }
         }
     }
 }
