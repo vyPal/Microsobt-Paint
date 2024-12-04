@@ -69,7 +69,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.13</version>
                 <configuration>
-                    <mainClass>com.sword.mymicrosobtpain.HelloApplication</mainClass>
+                    <mainClass>com.sword.mymicrosobtpain.Main</mainClass>
                 </configuration>
             </plugin>
 
@@ -82,7 +82,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.sword.microsobtpain/com.sword.mymicrosobtpain.HelloApplication</mainClass>
+                            <mainClass>com.sword.mymicrosobtpain.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
