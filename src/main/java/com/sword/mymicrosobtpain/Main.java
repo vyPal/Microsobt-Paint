@@ -78,10 +78,11 @@ public class Main extends Application {
 
         Menu canvasMenu = new Menu("Canvas");
         MenuItem clearCanvasItem = new MenuItem("Clear canvas");
+        MenuItem undoStepItem = new MenuItem("Undo");
 
         fileMenu.getItems().addAll(loadItem, saveItem);
         menuBar.getMenus().add(fileMenu);
-        canvasMenu.getItems().add(clearCanvasItem);
+        canvasMenu.getItems().addAll(clearCanvasItem,undoStepItem);
         menuBar.getMenus().add(canvasMenu);
         colorMenu.getItems().addAll(blueButton,redButton,blackButton);
         menuBar.getMenus().add(colorMenu);
@@ -90,8 +91,11 @@ public class Main extends Application {
 
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
+        CanvasController canvasController = new CanvasController(canvas);
+
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
+            canvasController.saveState();
             gc.beginPath();
             gc.moveTo(e.getX(), e.getY());
             gc.stroke();
@@ -102,7 +106,7 @@ public class Main extends Application {
             gc.stroke();
         });
 
-        CanvasController canvasController = new CanvasController(canvas);
+
 
         loadItem.setOnAction(e -> loadImage(primaryStage));
         saveItem.setOnAction(e -> saveImage(primaryStage));
@@ -111,7 +115,7 @@ public class Main extends Application {
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
         blackButton.setOnAction(e-> canvasController.changeColor(Color.BLACK));
-
+        undoStepItem.setOnAction(e-> canvasController.undo());
 
         root.setTop(menuBar);
         root.setCenter(canvas);

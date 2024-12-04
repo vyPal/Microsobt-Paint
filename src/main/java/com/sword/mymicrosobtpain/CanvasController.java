@@ -14,6 +14,7 @@ import javafx.stage.Window;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.ArrayList;
 import java.io.IOException;
 
 public class CanvasController {
@@ -22,14 +23,23 @@ public class CanvasController {
     private Canvas canvas;
     private GraphicsContext gc;
     private Color color;
+    private ArrayList<WritableImage> steps;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
         this.color = Color.BLACK;
+        this.steps = new ArrayList<>();
+    }
+
+    public void saveState() {
+        WritableImage snapshot = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        canvas.snapshot(null, snapshot);
+        steps.add(snapshot);
     }
 
     public void handleMousePressed(double x, double y) {
+        saveState();
         gc.beginPath();
         gc.moveTo(x, y);
         gc.stroke();
@@ -38,14 +48,20 @@ public class CanvasController {
     public void handleMouseDragged(double x, double y) {
         gc.lineTo(x, y);
         gc.stroke();
-
     }
 
-    public void changeColor(Color color){
+    public void changeColor(Color color) {
         this.color = color;
         this.gc.setFill(color);
         this.gc.setStroke(color);
+    }
 
+    public void undo() {
+        if (!steps.isEmpty()) {
+            WritableImage lastState = steps.remove(steps.size() - 1);
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            gc.drawImage(lastState, 0, 0, canvas.getWidth(), canvas.getHeight());
+        }
     }
 
 
