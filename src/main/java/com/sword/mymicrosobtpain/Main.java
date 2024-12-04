@@ -29,7 +29,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Simple Paint");
+        primaryStage.setTitle("MyMicrosobtPain");
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);

@@ -1,0 +1,17 @@
+/* Styles for the MenuBar */
+.menu-bar {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Styles for the Canvas */
+.canvas {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+/* Styles for the application window */
+.root {
+    -fx-padding: 10px;
+    -fx-background-color: #ffffff;
+}
