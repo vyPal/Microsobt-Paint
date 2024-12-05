@@ -7,7 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+
 import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -18,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
 
+//import javafx.scene.paint.Color;
+//import javafx.scene.image.PixelReader;
 public class CanvasController {
 
     @FXML
@@ -104,12 +108,12 @@ public class CanvasController {
     }
 
     public void invert() {
-        //double w = canvas.getWidth();
-        //double h = canvas.getHeight();
-        //PixelReader reader = canvas.getPixelReader();
-        //////////////WritableImage wImage = new WritableImage(w, h);//////////////
-        //PixelWriter writer = canvas.getPixelWriter();
-        /*
+        double w = canvas.getWidth();
+        double h = canvas.getHeight();
+        PixelReader reader = steps[-1].get;
+       WritableImage wImage = new WritableImage(w, h);//////////////
+       PixelWriter writer = canvas.getPixelWriter();
+
         for(int y = 0; y < h; y++) {
          for(int x = 0; x < w; x++) {
             //Retrieving the color of the pixel of the loaded image
@@ -118,7 +122,7 @@ public class CanvasController {
             writer.setColor(x, y, color.invert());
          }
       }
-        */
+
     }
 }
 
