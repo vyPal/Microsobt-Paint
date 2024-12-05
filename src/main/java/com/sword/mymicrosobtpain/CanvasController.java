@@ -109,6 +109,16 @@ public class CanvasController {
         //PixelReader reader = canvas.getPixelReader();
         //////////////WritableImage wImage = new WritableImage(w, h);//////////////
         //PixelWriter writer = canvas.getPixelWriter();
+        /*
+        for(int y = 0; y < h; y++) {
+         for(int x = 0; x < w; x++) {
+            //Retrieving the color of the pixel of the loaded image
+            Color color = reader.getColor(x, y);
+            //Setting the color to the writable image
+            writer.setColor(x, y, color.invert());
+         }
+      }
+        */
     }
 }
 
