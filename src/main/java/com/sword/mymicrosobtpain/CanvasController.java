@@ -108,21 +108,23 @@ public class CanvasController {
     }
 
     public void invert() {
-        double w = canvas.getWidth();
-        double h = canvas.getHeight();
-        PixelReader reader = steps[-1].get;
-       WritableImage wImage = new WritableImage(w, h);//////////////
-       PixelWriter writer = canvas.getPixelWriter();
+        if (steps.isEmpty()) return;
 
-        for(int y = 0; y < h; y++) {
-         for(int x = 0; x < w; x++) {
-            //Retrieving the color of the pixel of the loaded image
-            Color color = reader.getColor(x, y);
-            //Setting the color to the writable image
-            writer.setColor(x, y, color.invert());
-         }
-      }
+        WritableImage lastState = steps.get(steps.size() - 1);
+        PixelReader reader = lastState.getPixelReader();
 
+        WritableImage invertedImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        PixelWriter writer = invertedImage.getPixelWriter();
+
+        for (int y = 0; y < (int) canvas.getHeight(); y++) {
+            for (int x = 0; x < (int) canvas.getWidth(); x++) {
+                Color color = reader.getColor(x, y);
+                writer.setColor(x, y, color.invert());
+            }
+        }
+
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.drawImage(invertedImage, 0, 0);
     }
 }
 
