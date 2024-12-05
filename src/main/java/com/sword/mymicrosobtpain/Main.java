@@ -43,7 +43,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MyMicrosobtPain");
 
-        primaryStage.getIcons().add(new Image("file:paint-palette.png"));
+        primaryStage.getIcons().add(new Image("file:assets/paint-palette.png"));
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);
