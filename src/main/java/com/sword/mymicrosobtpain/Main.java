@@ -108,7 +108,7 @@ public class Main extends Application {
 
 
 
-        loadItem.setOnAction(e -> loadImage(primaryStage));
+        loadItem.setOnAction(e -> loadImage(primaryStage, canvasController));
         saveItem.setOnAction(e -> saveImage(primaryStage));
         clearCanvasItem.setOnAction(e-> clearCanvas(canvasController));
 
@@ -126,16 +126,18 @@ public class Main extends Application {
     }
 
     private void clearCanvas(CanvasController canvasController){
+        canvasController.saveState();
         canvasController.clearCanvas();
     }
 
-    private void loadImage(Stage stage) {
+    private void loadImage(Stage stage, CanvasController canvasController) {
         FileChooser fileChooser = new FileChooser();
 
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image files jpg, jpeg, bmp", "*.jpg", "*.jpeg", "*.bmp"));
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
+                canvasController.saveState();
                 Image image = new Image(file.toURI().toString());
                 gc.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
             } catch (Exception ex) {
