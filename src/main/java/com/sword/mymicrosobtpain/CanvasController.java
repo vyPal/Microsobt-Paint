@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -100,6 +101,14 @@ public class CanvasController {
 
     public void clearCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    public void invert() {
+        //double w = canvas.getWidth();
+        //double h = canvas.getHeight();
+        //PixelReader reader = canvas.getPixelReader();
+        //////////////WritableImage wImage = new WritableImage(w, h);//////////////
+        //PixelWriter writer = canvas.getPixelWriter();
     }
 }
 

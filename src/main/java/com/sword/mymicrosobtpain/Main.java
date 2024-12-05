@@ -79,6 +79,10 @@ public class Main extends Application {
         Menu canvasMenu = new Menu("Canvas");
         MenuItem clearCanvasItem = new MenuItem("Clear canvas");
         MenuItem undoStepItem = new MenuItem("Undo");
+        Menu negativMenu = new Menu("Negativ");////
+        MenuItem invertMenuButton = new MenuItem("Invert");////
+
+
 
         fileMenu.getItems().addAll(loadItem, saveItem);
         menuBar.getMenus().add(fileMenu);
@@ -86,6 +90,8 @@ public class Main extends Application {
         menuBar.getMenus().add(canvasMenu);
         colorMenu.getItems().addAll(blueButton,redButton,blackButton);
         menuBar.getMenus().add(colorMenu);
+        negativMenu.getItems().addAll(invertMenuButton);////
+        menuBar.getMenus().add(negativMenu);////
         AboutMenu.getItems().addAll(AboutUs);
         menuBar.getMenus().add(AboutMenu);
 
@@ -106,11 +112,11 @@ public class Main extends Application {
             gc.stroke();
         });
 
-
-
         loadItem.setOnAction(e -> loadImage(primaryStage, canvasController));
         saveItem.setOnAction(e -> saveImage(primaryStage));
         clearCanvasItem.setOnAction(e-> clearCanvas(canvasController));
+
+        invertMenuButton.setOnAction(e -> invertCanvas(canvasController));
 
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
@@ -123,6 +129,10 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    private void invertCanvas(CanvasController canvasController){
+        canvasController.invert();
     }
 
     private void clearCanvas(CanvasController canvasController){
@@ -152,9 +162,8 @@ public class Main extends Application {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPEG files (*.jpeg)", "*.jpeg"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp"));
         File file = fileChooser.showSaveDialog(stage);
-        System.out.println("Sobek pred if");
         if (file != null) {
-            System.out.println("Sobek");
+            System.out.println("To je ten controlFlow...");
             try {
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
                 canvas.snapshot(null, writableImage);
