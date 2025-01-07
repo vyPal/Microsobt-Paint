@@ -42,7 +42,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MyMicrosobtPain");
-
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(800);
         primaryStage.getIcons().add(new Image("file:assets/paint-palette.png"));
 
         BorderPane root = new BorderPane();
@@ -61,12 +62,14 @@ public class Main extends Application {
             
             public void handle(ActionEvent event) {
                 final Stage dialog = new Stage();
-                dialog.setTitle("About our team!");
+                dialog.setTitle("About");
                 dialog.initModality(Modality.APPLICATION_MODAL);
                 dialog.initOwner(primaryStage);
+                dialog.setMinHeight(100);
+                dialog.setMinWidth(200);
                 VBox dialogVbox = new VBox(20);
-                dialogVbox.getChildren().add(new Text("Members: Michal Prikasky, Sebastian Ondruska,\nJiri Novak, Jakub Palacky\nPS. JavaFx sucks :<"));
-                Scene dialogScene = new Scene(dialogVbox, 400, 300);
+                dialogVbox.getChildren().add(new Text("Members: Michal Prikasky, Sebastian Ondruska, Jiri Novak, Jakub Palacky"));
+                Scene dialogScene = new Scene(dialogVbox, 200, 100);
                 dialog.setScene(dialogScene);
                 dialog.show();
             }
@@ -75,12 +78,15 @@ public class Main extends Application {
         MenuItem blueButton = new MenuItem("Blue");
         MenuItem redButton = new MenuItem("Red");
         MenuItem blackButton = new MenuItem("Black");
-
+        
         Menu canvasMenu = new Menu("Canvas");
         MenuItem clearCanvasItem = new MenuItem("Clear canvas");
         MenuItem undoStepItem = new MenuItem("Undo");
         Menu negativMenu = new Menu("Negativ");////
         MenuItem invertMenuButton = new MenuItem("Invert");////
+
+        Menu generateMenu = new Menu("Generate");
+        MenuItem generateImage = new MenuItem("Random Image");
 
 
 
@@ -94,6 +100,8 @@ public class Main extends Application {
         menuBar.getMenus().add(negativMenu);////
         AboutMenu.getItems().addAll(AboutUs);
         menuBar.getMenus().add(AboutMenu);
+        generateMenu.getItems().add(generateImage);
+        menuBar.getMenus().add(generateMenu);
 
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
@@ -118,6 +126,8 @@ public class Main extends Application {
 
         invertMenuButton.setOnAction(e -> invertCanvas(canvasController));
 
+        generateImage.setOnAction(e -> generateImage(canvasController));
+
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
         blackButton.setOnAction(e-> canvasController.changeColor(Color.BLACK));
@@ -138,6 +148,10 @@ public class Main extends Application {
     private void clearCanvas(CanvasController canvasController){
         canvasController.saveState();
         canvasController.clearCanvas();
+    }
+
+    private void generateImage(CanvasController canvasController){
+        canvasController.generateRandomImage();
     }
 
     private void loadImage(Stage stage, CanvasController canvasController) {

@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.awt.image.BufferedImage;
 
 //import javafx.scene.paint.Color;
 //import javafx.scene.image.PixelReader;
@@ -125,6 +126,24 @@ public class CanvasController {
 
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.drawImage(invertedImage, 0, 0);
+    }
+
+    public void generateRandomImage(){
+        int CanvasWidth = (int)canvas.getWidth();
+        int CanvasHeight = (int)canvas.getHeight();
+
+        WritableImage img = new WritableImage(CanvasWidth, CanvasHeight);
+        for(int y = 0; y < CanvasHeight; y++){
+            for(int x = 0; x < CanvasWidth; x++){
+                int a = (int)(Math.random()*256);
+                int r = (int)(Math.random()*256);
+                int g = (int)(Math.random()*256);
+                int b = (int)(Math.random()*256);
+                int pixel = (a<<24) | (r<<16) | (g<<8) | b;
+                img.getPixelWriter().setArgb(x,y,pixel);
+            }
+        }
+        gc.drawImage(img, 0, 0);
     }
 }
 
