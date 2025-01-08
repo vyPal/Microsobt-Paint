@@ -14,6 +14,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -61,16 +62,19 @@ public class Main extends Application {
         AboutUs.setOnAction(new EventHandler<ActionEvent>() {
             
             public void handle(ActionEvent event) {
-                final Stage dialog = new Stage();
+                Stage dialog = new Stage();
                 dialog.setTitle("About");
                 dialog.initModality(Modality.APPLICATION_MODAL);
                 dialog.initOwner(primaryStage);
-                dialog.setMinHeight(100);
-                dialog.setMinWidth(200);
+                dialog.getIcons().add(new Image("file:assets/lb.png"));
                 VBox dialogVbox = new VBox(20);
-                dialogVbox.getChildren().add(new Text("Members: Michal Prikasky, Sebastian Ondruska, Jiri Novak, Jakub Palacky"));
-                Scene dialogScene = new Scene(dialogVbox, 200, 100);
+                Text text = new Text("Members: Michal Prikasky, Sebastian Ondruska, Jiri Novak, Jakub Palacky");
+                dialogVbox.getChildren().add(text);
+                dialogVbox.setAlignment(Pos.CENTER);
+                Scene dialogScene = new Scene(dialogVbox, 400, 100);
                 dialog.setScene(dialogScene);
+                dialog.setMinWidth(400);
+                dialog.setMinHeight(100);
                 dialog.show();
             }
          });
@@ -119,6 +123,7 @@ public class Main extends Application {
             gc.lineTo(e.getX(), e.getY());
             gc.stroke();
         });
+
 
         loadItem.setOnAction(e -> loadImage(primaryStage, canvasController));
         saveItem.setOnAction(e -> saveImage(primaryStage));
