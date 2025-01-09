@@ -1,5 +1,6 @@
 package com.sword.mymicrosobtpain;
 
+import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +35,7 @@ public class CanvasController {
     private Random rand = new Random();
     private int[][] pixels;
     private boolean[][] visited;
+    private int currentRadius = 0;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
@@ -159,6 +161,8 @@ public class CanvasController {
         int CanvasWidth = (int) canvas.getWidth();
         int CanvasHeight = (int) canvas.getHeight();
 
+        currentRadius = 0;
+
         pixels = new int[CanvasWidth][CanvasHeight];
         visited = new boolean[CanvasWidth][CanvasHeight];
 
@@ -169,30 +173,33 @@ public class CanvasController {
         pixels[centerX][centerY] = centerColor;
         visited[centerX][centerY] = true;
 
-        for (int radius = 1; radius <= Math.max(CanvasWidth, CanvasHeight); radius++) {
-            for (int x = centerX - radius; x <= centerX + radius; x++) {
-                for (int y = centerY - radius; y <= centerY + radius; y++) {
-                    if (x >= 0 && x < CanvasWidth && y >= 0 && y < CanvasHeight &&
-                            Math.abs(x - centerX) + Math.abs(y - centerY) <= radius && !visited[x][y]) {
-                        int[] surroundingColors = getSurroundingPixels(x, y, CanvasWidth, CanvasHeight);
-                        int averageColor = calculateAverageColor(surroundingColors);
-                        int newColor = generateVariedColor(averageColor);
-                        pixels[x][y] = newColor;
-                        visited[x][y] = true;
+        // Use AnimationTimer for smooth rendering
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (currentRadius <= Math.max(CanvasWidth, CanvasHeight)) {
+                    for (int x = centerX - currentRadius; x <= centerX + currentRadius; x++) {
+                        for (int y = centerY - currentRadius; y <= centerY + currentRadius; y++) {
+                            if (x >= 0 && x < CanvasWidth && y >= 0 && y < CanvasHeight &&
+                                    Math.abs(x - centerX) + Math.abs(y - centerY) <= currentRadius && !visited[x][y]) {
+                                int[] surroundingColors = getSurroundingPixels(x, y, CanvasWidth, CanvasHeight);
+                                int averageColor = calculateAverageColor(surroundingColors);
+                                int newColor = generateVariedColor(averageColor);
+                                pixels[x][y] = newColor;
+                                visited[x][y] = true;
+                                gc.setFill(Color.rgb((newColor >> 16) & 0xFF, (newColor >> 8) & 0xFF, newColor & 0xFF));
+                                gc.fillRect(x, y, 1, 1);
+                            }
+                        }
                     }
+                    currentRadius++;
+                } else {
+                    this.stop();
                 }
             }
-        }
+        };
 
-        WritableImage img = new WritableImage(CanvasWidth, CanvasHeight);
-        PixelWriter writer = img.getPixelWriter();
-        for (int y = 0; y < CanvasHeight; y++) {
-            for (int x = 0; x < CanvasWidth; x++) {
-                writer.setArgb(x, y, pixels[x][y]);
-            }
-        }
-
-        gc.drawImage(img, 0, 0);
+        timer.start();
     }
 
     private int generateRandomColor() {
