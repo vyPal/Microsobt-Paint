@@ -1,6 +1,8 @@
 package com.sword.mymicrosobtpain;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -46,6 +48,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(800);
         primaryStage.getIcons().add(new Image("file:assets/paint-palette.png"));
+        primaryStage.sizeToScene();
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 800, 600);
@@ -109,6 +112,18 @@ public class Main extends Application {
         menuBar.getMenus().add(generateMenu);
 
         canvas = new Canvas(800, 600);
+        primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                canvas.setWidth(t1.doubleValue());
+            }
+        });
+        primaryStage.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                canvas.setHeight(t1.doubleValue());
+            }
+        });
         gc = canvas.getGraphicsContext2D();
         CanvasController canvasController = new CanvasController(canvas);
 
