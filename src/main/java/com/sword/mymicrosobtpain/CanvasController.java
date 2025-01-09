@@ -36,6 +36,7 @@ public class CanvasController {
     private int[][] pixels;
     private boolean[][] visited;
     private int currentRadius = 0;
+    private AnimationTimer timer;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
@@ -174,7 +175,10 @@ public class CanvasController {
         visited[centerX][centerY] = true;
 
         // Use AnimationTimer for smooth rendering
-        AnimationTimer timer = new AnimationTimer() {
+        if (timer != null) {
+            timer.stop();
+        }
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if (currentRadius <= Math.max(CanvasWidth, CanvasHeight)) {
