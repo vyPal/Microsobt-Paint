@@ -113,6 +113,7 @@ public class CanvasController {
     }
 
     public void invert() {
+        saveState();
         if (steps.isEmpty()) return;
 
         WritableImage lastState = steps.get(steps.size() - 1);

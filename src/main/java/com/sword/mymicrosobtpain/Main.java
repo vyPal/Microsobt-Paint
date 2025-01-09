@@ -9,16 +9,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -103,8 +100,8 @@ public class Main extends Application {
         menuBar.getMenus().add(canvasMenu);
         colorMenu.getItems().addAll(blueButton,redButton,blackButton);
         menuBar.getMenus().add(colorMenu);
-        negativMenu.getItems().addAll(invertMenuButton);////
-        menuBar.getMenus().add(negativMenu);////
+        negativMenu.getItems().addAll(invertMenuButton);
+        menuBar.getMenus().add(negativMenu);
         AboutMenu.getItems().addAll(AboutUs);
         menuBar.getMenus().add(AboutMenu);
         generateMenu.getItems().add(generateImage);
@@ -164,7 +161,7 @@ public class Main extends Application {
     }
 
     private void invertCanvas(CanvasController canvasController){
-        canvasController.invert();
+                canvasController.invert();
     }
 
     private void clearCanvas(CanvasController canvasController){
