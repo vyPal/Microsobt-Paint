@@ -31,6 +31,9 @@ public class CanvasController {
     private GraphicsContext gc;
     private Color color;
     private ArrayList<WritableImage> steps;
+    private Random rand = new Random();
+    private int[][] pixels;
+    private boolean[][] visited;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
@@ -139,8 +142,8 @@ public class CanvasController {
             for(int x = 0; x < CanvasWidth; x++) {
                 int r = (int)(255 * (double)x / CanvasWidth) + rand.nextInt(20) - 10;
                 int g = (int)(255 * (double)y / CanvasHeight) + rand.nextInt(20) - 10;
-                int b = 128 + rand.nextInt(20) - 10; 
-                int a = 255; 
+                int b = 128 + rand.nextInt(20) - 10;
+                int a = 255;
                 r = Math.max(0, Math.min(255, r));
                 g = Math.max(0, Math.min(255, g));
                 b = Math.max(0, Math.min(255, b));
@@ -149,5 +152,171 @@ public class CanvasController {
             }
         }
         gc.drawImage(img, 0, 0);
+    }
+
+    public void generateRandomPattern() {
+        int CanvasWidth = (int) canvas.getWidth();
+        int CanvasHeight = (int) canvas.getHeight();
+
+        pixels = new int[CanvasWidth][CanvasHeight];
+        visited = new boolean[CanvasWidth][CanvasHeight];
+
+        int centerX = CanvasWidth / 2;
+        int centerY = CanvasHeight / 2;
+
+        int centerColor = generateRandomColor();
+        pixels[centerX][centerY] = centerColor;
+        visited[centerX][centerY] = true;
+
+        for (int radius = 1; radius <= Math.max(CanvasWidth, CanvasHeight); radius++) {
+            for (int x = centerX - radius; x <= centerX + radius; x++) {
+                for (int y = centerY - radius; y <= centerY + radius; y++) {
+                    if (x >= 0 && x < CanvasWidth && y >= 0 && y < CanvasHeight &&
+                            Math.abs(x - centerX) + Math.abs(y - centerY) <= radius && !visited[x][y]) {
+                        int[] surroundingColors = getSurroundingPixels(x, y, CanvasWidth, CanvasHeight);
+                        int averageColor = calculateAverageColor(surroundingColors);
+                        int newColor = generateVariedColor(averageColor);
+                        pixels[x][y] = newColor;
+                        visited[x][y] = true;
+                    }
+                }
+            }
+        }
+
+        WritableImage img = new WritableImage(CanvasWidth, CanvasHeight);
+        PixelWriter writer = img.getPixelWriter();
+        for (int y = 0; y < CanvasHeight; y++) {
+            for (int x = 0; x < CanvasWidth; x++) {
+                writer.setArgb(x, y, pixels[x][y]);
+            }
+        }
+
+        gc.drawImage(img, 0, 0);
+    }
+
+    private int generateRandomColor() {
+        int r = 192 + rand.nextInt(64);
+        int g = 192 + rand.nextInt(64);
+        int b = 192 + rand.nextInt(64);
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
+    }
+
+    private int[] getSurroundingPixels(int x, int y, int maxx, int maxy) {
+        int[] colors = new int[24];
+        int index = 0;
+
+        if (x > 0 && visited[x - 1][y]) {
+            colors[index++] = pixels[x - 1][y];
+        }
+        if (x < maxx - 1 && visited[x + 1][y]) {
+            colors[index++] = pixels[x + 1][y];
+        }
+        if (y > 0 && visited[x][y - 1]) {
+            colors[index++] = pixels[x][y - 1];
+        }
+        if (y < maxy - 1 && visited[x][y + 1]) {
+            colors[index++] = pixels[x][y + 1];
+        }
+        if (x > 0 && y > 0 && visited[x - 1][y - 1]) {
+            colors[index++] = pixels[x - 1][y - 1];
+        }
+        if (x < maxx - 1 && y > 0 && visited[x + 1][y - 1]) {
+            colors[index++] = pixels[x + 1][y - 1];
+        }
+        if (x > 0 && y < maxy - 1 && visited[x - 1][y + 1]) {
+            colors[index++] = pixels[x - 1][y + 1];
+        }
+        if (x < maxx - 1 && y < maxy - 1 && visited[x + 1][y + 1]) {
+            colors[index++] = pixels[x + 1][y + 1];
+        }
+
+        if (x > 1 && visited[x - 2][y]) {
+            colors[index++] = pixels[x - 2][y];
+        }
+        if (x < maxx - 2 && visited[x + 2][y]) {
+            colors[index++] = pixels[x + 2][y];
+        }
+        if (y > 1 && visited[x][y - 2]) {
+            colors[index++] = pixels[x][y - 2];
+        }
+        if (y < maxy - 2 && visited[x][y + 2]) {
+            colors[index++] = pixels[x][y + 2];
+        }
+        if (x > 1 && y > 1 && visited[x - 2][y - 2]) {
+            colors[index++] = pixels[x - 2][y - 2];
+        }
+        if (x < maxx - 2 && y > 1 && visited[x + 2][y - 2]) {
+            colors[index++] = pixels[x + 2][y - 2];
+        }
+        if (x > 1 && y < maxy - 2 && visited[x - 2][y + 2]) {
+            colors[index++] = pixels[x - 2][y + 2];
+        }
+        if (x < maxx - 2 && y < maxy - 2 && visited[x + 2][y + 2]) {
+            colors[index++] = pixels[x + 2][y + 2];
+        }
+        if (x > 1 && y > 0 && visited[x - 2][y - 1]) {
+            colors[index++] = pixels[x - 2][y - 1];
+        }
+        if (x < maxx - 2 && y > 0 && visited[x + 2][y - 1]) {
+            colors[index++] = pixels[x + 2][y - 1];
+        }
+        if (x > 1 && y < maxy - 1 && visited[x - 2][y + 1]) {
+            colors[index++] = pixels[x - 2][y + 1];
+        }
+        if (x < maxx - 2 && y < maxy - 1 && visited[x + 2][y + 1]) {
+            colors[index++] = pixels[x + 2][y + 1];
+        }
+        if (x > 0 && y > 1 && visited[x - 1][y - 2]) {
+            colors[index++] = pixels[x - 1][y - 2];
+        }
+        if (x < maxx - 1 && y > 1 && visited[x + 1][y - 2]) {
+            colors[index++] = pixels[x + 1][y - 2];
+        }
+        if (x > 0 && y < maxy - 2 && visited[x - 1][y + 2]) {
+            colors[index++] = pixels[x - 1][y + 2];
+        }
+        if (x < maxx - 1 && y < maxy - 2 && visited[x + 1][y + 2]) {
+            colors[index++] = pixels[x + 1][y + 2];
+        }
+
+        return colors;
+    }
+
+    private int calculateAverageColor(int[] colors) {
+        int rSum = 0;
+        int gSum = 0;
+        int bSum = 0;
+        int count = 0;
+
+        for (int color : colors) {
+            if (color != 0) {
+                rSum += (color >> 16) & 0xFF;
+                gSum += (color >> 8) & 0xFF;
+                bSum += color & 0xFF;
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            return generateRandomColor();
+        }
+
+        int avgR = Math.max(0, Math.min((int) Math.round(rSum / (double) count), 255));
+        int avgG = Math.max(0, Math.min((int) Math.round(gSum / (double) count), 255));
+        int avgB = Math.max(0, Math.min((int) Math.round(bSum / (double) count), 255));
+
+        return 0xFF000000 | (avgR << 16) | (avgG << 8) | avgB;
+    }
+
+    private int generateVariedColor(int averageColor) {
+        int r = (averageColor >> 16) & 0xFF;
+        int g = (averageColor >> 8) & 0xFF;
+        int b = averageColor & 0xFF;
+
+        r = Math.max(0, Math.min(r + rand.nextInt(50) - 25, 255));
+        g = Math.max(0, Math.min(g + rand.nextInt(50) - 25, 255));
+        b = Math.max(0, Math.min(b + rand.nextInt(50) - 25, 255));
+
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
     }
 }

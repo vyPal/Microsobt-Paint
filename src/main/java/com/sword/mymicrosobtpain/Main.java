@@ -91,7 +91,7 @@ public class Main extends Application {
 
         Menu generateMenu = new Menu("Generate");
         MenuItem generateImage = new MenuItem("Random Image");
-
+        MenuItem generatePattern = new MenuItem("Random Pattern");
 
 
         fileMenu.getItems().addAll(loadItem, saveItem);
@@ -105,6 +105,7 @@ public class Main extends Application {
         AboutMenu.getItems().addAll(AboutUs);
         menuBar.getMenus().add(AboutMenu);
         generateMenu.getItems().add(generateImage);
+        generateMenu.getItems().add(generatePattern);
         menuBar.getMenus().add(generateMenu);
 
         canvas = new Canvas(800, 600);
@@ -132,6 +133,7 @@ public class Main extends Application {
         invertMenuButton.setOnAction(e -> invertCanvas(canvasController));
 
         generateImage.setOnAction(e -> generateImage(canvasController));
+        generatePattern.setOnAction(e -> generatePattern(canvasController));
 
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
@@ -157,6 +159,10 @@ public class Main extends Application {
 
     private void generateImage(CanvasController canvasController){
         canvasController.generateRandomImage();
+    }
+
+    private void generatePattern(CanvasController canvasController) {
+        canvasController.generateRandomPattern();
     }
 
     private void loadImage(Stage stage, CanvasController canvasController) {
