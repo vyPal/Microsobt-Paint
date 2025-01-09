@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 //import javafx.scene.paint.Color;
 //import javafx.scene.image.PixelReader;
@@ -131,19 +132,22 @@ public class CanvasController {
     public void generateRandomImage(){
         int CanvasWidth = (int)canvas.getWidth();
         int CanvasHeight = (int)canvas.getHeight();
+        Random rand = new Random();
 
         WritableImage img = new WritableImage(CanvasWidth, CanvasHeight);
-        for(int y = 0; y < CanvasHeight; y++){
-            for(int x = 0; x < CanvasWidth; x++){
-                int a = (int)(Math.random()*256);
-                int r = (int)(Math.random()*256);
-                int g = (int)(Math.random()*256);
-                int b = (int)(Math.random()*256);
-                int pixel = (a<<24) | (r<<16) | (g<<8) | b;
-                img.getPixelWriter().setArgb(x,y,pixel);
+        for(int y = 0; y < CanvasHeight; y++) {
+            for(int x = 0; x < CanvasWidth; x++) {
+                int r = (int)(255 * (double)x / CanvasWidth) + rand.nextInt(20) - 10;
+                int g = (int)(255 * (double)y / CanvasHeight) + rand.nextInt(20) - 10;
+                int b = 128 + rand.nextInt(20) - 10; 
+                int a = 255; 
+                r = Math.max(0, Math.min(255, r));
+                g = Math.max(0, Math.min(255, g));
+                b = Math.max(0, Math.min(255, b));
+                int pixel = (a << 24) | (r << 16) | (g << 8) | b;
+                img.getPixelWriter().setArgb(x, y, pixel);
             }
         }
         gc.drawImage(img, 0, 0);
     }
 }
-
