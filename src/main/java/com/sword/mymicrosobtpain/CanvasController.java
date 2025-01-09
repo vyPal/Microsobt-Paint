@@ -181,7 +181,7 @@ public class CanvasController {
                     for (int x = centerX - currentRadius; x <= centerX + currentRadius; x++) {
                         for (int y = centerY - currentRadius; y <= centerY + currentRadius; y++) {
                             if (x >= 0 && x < CanvasWidth && y >= 0 && y < CanvasHeight &&
-                                    Math.abs(x - centerX) + Math.abs(y - centerY) <= currentRadius && !visited[x][y]) {
+                                    Math.sqrt(Math.pow(Math.abs(x - centerX), 2) + Math.pow(Math.abs(y - centerY), 2)) <= currentRadius && !visited[x][y]) {
                                 int[] surroundingColors = getSurroundingPixels(x, y, CanvasWidth, CanvasHeight);
                                 int averageColor = calculateAverageColor(surroundingColors);
                                 int newColor = generateVariedColor(averageColor);
