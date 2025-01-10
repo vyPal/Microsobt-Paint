@@ -5,19 +5,21 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -27,6 +29,7 @@ import javafx.event.EventHandler;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -46,21 +49,45 @@ public class Main extends Application {
         primaryStage.setMinWidth(800);
         primaryStage.getIcons().add(new Image("file:assets/paint-palette.png"));
         primaryStage.sizeToScene();
+        Pane pane = new Pane();
+        pane.setStyle("-fx-background-color: #ADD8E6;");
+        Scene scene = new Scene(pane, 800, 600);
 
-        BorderPane root = new BorderPane();
-        Scene scene = new Scene(root, 800, 600);
 
-        MenuBar menuBar = new MenuBar();
-        Menu fileMenu = new Menu("File");
-        MenuItem loadItem = new MenuItem("Load");
-        MenuItem saveItem = new MenuItem("Save");
 
-        Menu colorMenu = new Menu("Colors");
 
-        Menu AboutMenu = new Menu("About");
-        MenuItem AboutUs = new MenuItem("About Us");
-        AboutUs.setOnAction(new EventHandler<ActionEvent>() {
-            
+
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.CENTER_RIGHT);
+
+        // Vytvoření tlačítek z MenuItems
+        Button loadButton = new Button("Load");
+        Button saveButton = new Button("Save");
+        Button blueButton = new Button("Blue");
+        Button redButton = new Button("Red");
+        Button blackButton = new Button("Black");
+        Button clearCanvasButton = new Button("Clear canvas");
+        Button undo = new Button("Undo");
+        Button invert = new Button("Invert");
+        Button generateImage = new Button("Random Image");
+        Button generatePattern = new Button("Random Pattern");
+        Button aboutUs = new Button("About Us");
+
+        // Nastavení kulatého tvaru tlačítek
+        Button[] buttons = {loadButton, saveButton, blueButton, redButton, blackButton, clearCanvasButton, undo, invert, generateImage, generatePattern, aboutUs};
+
+        for (Button button : buttons) {
+            button.setShape(new Circle(15));
+            button.setMinSize(60, 60);
+            button.setMaxSize(60, 60);
+            vbox.getChildren().add(button);
+        }
+
+
+        aboutUs.setOnAction(new EventHandler<ActionEvent>() {
+
             public void handle(ActionEvent event) {
                 Stage dialog = new Stage();
                 dialog.setTitle("About");
@@ -77,42 +104,16 @@ public class Main extends Application {
                 dialog.setMinHeight(100);
                 dialog.show();
             }
-         });
-
-        MenuItem blueButton = new MenuItem("Blue");
-        MenuItem redButton = new MenuItem("Red");
-        MenuItem blackButton = new MenuItem("Black");
-        
-        Menu canvasMenu = new Menu("Canvas");
-        MenuItem clearCanvasItem = new MenuItem("Clear canvas");
-        MenuItem undoStepItem = new MenuItem("Undo");
-        Menu negativMenu = new Menu("Negativ");////
-        MenuItem invertMenuButton = new MenuItem("Invert");////
-
-        Menu generateMenu = new Menu("Generate");
-        MenuItem generateImage = new MenuItem("Random Image");
-        MenuItem generatePattern = new MenuItem("Random Pattern");
+        });
 
 
-        fileMenu.getItems().addAll(loadItem, saveItem);
-        menuBar.getMenus().add(fileMenu);
-        canvasMenu.getItems().addAll(clearCanvasItem,undoStepItem);
-        menuBar.getMenus().add(canvasMenu);
-        colorMenu.getItems().addAll(blueButton,redButton,blackButton);
-        menuBar.getMenus().add(colorMenu);
-        negativMenu.getItems().addAll(invertMenuButton);
-        menuBar.getMenus().add(negativMenu);
-        AboutMenu.getItems().addAll(AboutUs);
-        menuBar.getMenus().add(AboutMenu);
-        generateMenu.getItems().add(generateImage);
-        generateMenu.getItems().add(generatePattern);
-        menuBar.getMenus().add(generateMenu);
+
 
         canvas = new Canvas(800, 600);
         primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                canvas.setWidth(t1.doubleValue());
+                canvas.setWidth(t1.doubleValue() * 0.9);
             }
         });
         primaryStage.heightProperty().addListener(new ChangeListener<Number>() {
@@ -138,11 +139,11 @@ public class Main extends Application {
         });
 
 
-        loadItem.setOnAction(e -> loadImage(primaryStage, canvasController));
-        saveItem.setOnAction(e -> saveImage(primaryStage));
-        clearCanvasItem.setOnAction(e-> clearCanvas(canvasController));
+        loadButton.setOnAction(e -> loadImage(primaryStage, canvasController));
+        saveButton.setOnAction(e -> saveImage(primaryStage));
+        clearCanvasButton.setOnAction(e-> clearCanvas(canvasController));
 
-        invertMenuButton.setOnAction(e -> invertCanvas(canvasController));
+        invert.setOnAction(e -> invertCanvas(canvasController));
 
         generateImage.setOnAction(e -> generateImage(canvasController));
         generatePattern.setOnAction(e -> generatePattern(canvasController));
@@ -150,13 +151,20 @@ public class Main extends Application {
         redButton.setOnAction(e-> canvasController.changeColor(Color.RED));
         blueButton.setOnAction(e-> canvasController.changeColor(Color.BLUE));
         blackButton.setOnAction(e-> canvasController.changeColor(Color.BLACK));
-        undoStepItem.setOnAction(e-> canvasController.undo());
+        undo.setOnAction(e-> canvasController.undo());
 
-        root.setTop(menuBar);
-        root.setCenter(canvas);
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(canvas, vbox);
+        pane.getChildren().add(hBox);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        invertCanvas(canvasController);
+        invertCanvas(canvasController);
+
+
+
 
     }
 
@@ -167,6 +175,8 @@ public class Main extends Application {
     private void clearCanvas(CanvasController canvasController){
         canvasController.saveState();
         canvasController.clearCanvas();
+        invertCanvas(canvasController);
+        invertCanvas(canvasController);
     }
 
     private void generateImage(CanvasController canvasController){
@@ -213,3 +223,6 @@ public class Main extends Application {
         }
     }
 }
+
+
+
