@@ -37,7 +37,11 @@ public class Main extends Application {
 
     private Canvas canvas;
     private GraphicsContext gc;
+    private WritableImage snapshot;
+    private boolean isOn = false;
+    private static final int GLASS_SIZE = 100;
 
+    private static final int MAGNIFICATION = 2;
     public static void main(String[] args) {
         launch(args);
     }
@@ -52,11 +56,6 @@ public class Main extends Application {
         Pane pane = new Pane();
         pane.setStyle("-fx-background-color: #ADD8E6;");
         Scene scene = new Scene(pane, 800, 600);
-
-
-
-
-
 
         VBox vbox = new VBox(10);
         vbox.setPadding(new Insets(20));
@@ -74,9 +73,10 @@ public class Main extends Application {
         Button generateImage = new Button("Random Image");
         Button generatePattern = new Button("Random Pattern");
         Button aboutUs = new Button("About Us");
+        Button zoom = new Button("Zoom");
 
         // Nastavení kulatého tvaru tlačítek
-        Button[] buttons = {loadButton, saveButton, blueButton, redButton, blackButton, clearCanvasButton, undo, invert, generateImage, generatePattern, aboutUs};
+        Button[] buttons = {loadButton, saveButton, blueButton, redButton, blackButton, clearCanvasButton, undo, invert, generateImage, generatePattern, aboutUs, zoom};
 
         for (Button button : buttons) {
             button.setShape(new Circle(15));
@@ -107,7 +107,13 @@ public class Main extends Application {
         });
 
 
-
+        zoom.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                snapshot = canvas.snapshot(null, null);
+                isOn = !isOn;
+            }
+        });
 
         canvas = new Canvas(800, 600);
         primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
@@ -123,6 +129,9 @@ public class Main extends Application {
             }
         });
         gc = canvas.getGraphicsContext2D();
+
+        canvas.setOnMouseMoved(this::handleMouseMoved);
+
         CanvasController canvasController = new CanvasController(canvas);
 
 
@@ -154,6 +163,7 @@ public class Main extends Application {
         undo.setOnAction(e-> canvasController.undo());
 
 
+
         HBox hBox = new HBox();
         hBox.getChildren().addAll(canvas, vbox);
         pane.getChildren().add(hBox);
@@ -168,6 +178,36 @@ public class Main extends Application {
 
     }
 
+    private void handleMouseMoved(MouseEvent event) {
+        if (isOn) {
+            double x = event.getX();
+            double y = event.getY();
+
+            double magnifyX = Math.max(0, x - GLASS_SIZE / 2);
+            double magnifyY = Math.max(0, y - GLASS_SIZE / 2);
+            double magnifyWidth = Math.min(GLASS_SIZE, canvas.getWidth() - magnifyX);
+            double magnifyHeight = Math.min(GLASS_SIZE, canvas.getHeight() - magnifyY);
+
+            gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+            gc.drawImage(snapshot, 0, 0);
+
+            gc.save();
+            //gc.translate(x, y);
+            gc.scale(MAGNIFICATION, MAGNIFICATION);
+            WritableImage ns = gc.getCanvas().snapshot(null, null);
+            //gc.translate(-magnifyX, -magnifyY
+            gc.restore();
+
+            gc.drawImage(ns, magnifyX + GLASS_SIZE / 4, magnifyY + GLASS_SIZE / 4, magnifyWidth/MAGNIFICATION, magnifyHeight/MAGNIFICATION,
+                    x - GLASS_SIZE / 2, y - GLASS_SIZE / 2,
+                    GLASS_SIZE, GLASS_SIZE);
+
+            gc.setFill(Color.TRANSPARENT);
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(2);
+            gc.strokeOval(x - GLASS_SIZE / 2, y - GLASS_SIZE / 2, GLASS_SIZE, GLASS_SIZE);
+        }
+    }
     private void invertCanvas(CanvasController canvasController){
                 canvasController.invert();
     }
